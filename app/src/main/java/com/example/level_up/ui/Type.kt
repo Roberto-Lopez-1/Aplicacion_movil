@@ -1,4 +1,4 @@
-package com.example.applvlup.ui.theme
+package com.example.level_up.ui
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

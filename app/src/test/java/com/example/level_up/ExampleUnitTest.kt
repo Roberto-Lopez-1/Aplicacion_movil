@@ -1,4 +1,4 @@
-package com.example.applvlup
+package com.example.level_up
 
 import org.junit.Test
 

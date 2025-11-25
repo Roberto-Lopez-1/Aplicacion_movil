@@ -30,11 +30,6 @@ fun LoadingScreen(navController: NavController) {
                 popUpTo("loading") { inclusive = true }
             }
         }
-
-
-        navController.navigate("login"){
-            popUpTo("loading") { inclusive = true }
-        }
     }
 
     Box(

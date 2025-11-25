@@ -39,8 +39,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,8 +64,7 @@ import com.example.level_up.viewmodel.UsuarioViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PerfilScreen(navController: NavController) {
-    val usuarioViewModel: UsuarioViewModel = viewModel()
+fun PerfilScreen(navController: NavController, usuarioViewModel: UsuarioViewModel = viewModel()) {
     var usuario by remember { mutableStateOf<Usuario?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     val context = LocalContext.current
@@ -156,14 +157,6 @@ fun PerfilScreen(navController: NavController) {
                             contentAlignment = Alignment.Center
                         ) {
                             if (!usuario?.imagen.isNullOrEmpty()) {
-                                Image(
-                                    painter = rememberAsyncImagePainter(model = usuario?.imagen),
-                                    contentDescription = "Imagen de perfil",
-                                    modifier = Modifier
-                                        .size(120.dp)
-                                        .clip(CircleShape),
-                                    contentScale = ContentScale.Crop
-                                )
                                 // Overlay para indicar que es editable
                                 Box(
                                     modifier = Modifier

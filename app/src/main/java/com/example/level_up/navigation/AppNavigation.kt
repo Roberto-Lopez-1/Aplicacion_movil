@@ -12,6 +12,7 @@ import com.example.level_up.ui.screen.LoginScreen
 import com.example.level_up.ui.screen.PerfilScreen
 import com.example.level_up.ui.screen.RegistroScreen
 import com.example.level_up.viewmodel.CarritoViewModel
+import com.example.level_up.viewmodel.UsuarioViewModel
 
 @Composable
 fun AppNavigation() {
@@ -24,6 +25,6 @@ fun AppNavigation() {
         composable ("registro"){ RegistroScreen(navController = navController) }
         composable("home") { HomeScreen(navController = navController, carritoViewModel = carritoViewModel) }
         composable("carrito") { CarritoScreen(navController = navController, carritoViewModel = carritoViewModel) }
-        composable("perfil") { PerfilScreen(navController = navController) }
+        composable("perfil") { PerfilScreen(navController) }
     }
 }

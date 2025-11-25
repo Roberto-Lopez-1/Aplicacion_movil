@@ -35,8 +35,7 @@ import com.example.level_up.viewmodel.ProductoViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController, carritoViewModel: CarritoViewModel) {
-    val productoViewModel: ProductoViewModel = viewModel()
+fun HomeScreen(navController: NavController, carritoViewModel: CarritoViewModel, productoViewModel: ProductoViewModel = viewModel()) {
     val productos by productoViewModel.productos.collectAsState()
     val carrito by carritoViewModel.estadoCarrito.collectAsState()
 

@@ -23,10 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.level_up.model.Producto
-import com.example.level_up.viewmodel.CarritoViewModel
-import kotlinx.coroutines.withContext
 
 @Composable
 fun TarjetaProducto(

@@ -1,10 +1,14 @@
 package com.example.level_up.model
 
 import androidx.annotation.DrawableRes
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-class Producto(
-    val id: Int,
+@Entity(tableName = "Producto")
+data class Producto(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val nombre: String,
-    val precio: Double,
-    @DrawableRes val imagen: Int // Campo actualizado de `emoji: String` a `imagen: Int`.
+    val precio: Int,
+    val imagen: String?
 )

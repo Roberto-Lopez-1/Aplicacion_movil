@@ -10,8 +10,17 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.*
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -19,48 +28,49 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.level_up.ui.components.TarjetaProducto
-import com.example.level_up.viewmodel.CatalogoViewModel
+import com.example.level_up.viewmodel.CarritoViewModel
+import com.example.level_up.viewmodel.ProductoViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CatalogoScreen(
-    catalogoViewModel: CatalogoViewModel = viewModel(),
-    onProfile: () -> Unit,
-    onCartClick: () -> Unit
-) {
-    val productos = catalogoViewModel.productos
-    val carrito by catalogoViewModel.estadoCarrito.collectAsState()
+fun HomeScreen(navController: NavController, carritoViewModel: CarritoViewModel) {
+    val productoViewModel: ProductoViewModel = viewModel()
+    val productos by productoViewModel.productos.collectAsState()
+    val carrito by carritoViewModel.estadoCarrito.collectAsState()
+
+    LaunchedEffect(Unit) {
+        productoViewModel.cargarProductos()
+    }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("CATÁLOGO", fontWeight = FontWeight.Bold, color = Color(0xFF0034FF)) },
+                title = { Text("CATÁLOGO", fontWeight = FontWeight.Bold, color = Color.White) },
                 actions = {
-                    IconButton(onClick = onCartClick) {
+                    IconButton(onClick = {navController.navigate("carrito")}) {
                         BadgedBox(badge = {
                             if (carrito.isNotEmpty()) {
                                 val totalItems = carrito.sumOf { it.cantidad }
-                                Badge(containerColor = Color(0xFF0034FF)) {
-                                    Text("$totalItems")
+                                Badge(containerColor = Color(0xFF7289DA)) {
+                                    Text("$totalItems", color = Color.White)
                                 }
                             }
                         }) {
-                            Icon(Icons.Default.ShoppingCart, contentDescription = "Carrito", tint = Color(0xFF00FF00))
+                            Icon(Icons.Default.ShoppingCart, contentDescription = "Carrito", tint = Color(0xFF7289DA))
                         }
                     }
                     Spacer(Modifier.width(8.dp))
-                    IconButton(onClick = onProfile) {
-                        Icon(Icons.Default.Person, contentDescription = "Perfil", tint = Color(
-                            0xFF0034FF
-                        )
-                        )
+                    IconButton(onClick = {navController.navigate("perfil")}) {
+                        Icon(Icons.Default.Person, contentDescription = "Perfil", tint = Color(0xFF7289DA))
                     }
+
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Black)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF23272A))
             )
         },
-        containerColor = Color.Black
+        containerColor = Color(0xFF2C2F33)
     ) { padding ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp),
@@ -69,8 +79,7 @@ fun CatalogoScreen(
             items(productos) { producto ->
                 TarjetaProducto(
                     producto = producto,
-                    onAgregarClick = { catalogoViewModel.agregarAlCarrito(it) }
-                )
+                    onAddToCart = { carritoViewModel.agregarAlCarrito(it) })
             }
         }
     }

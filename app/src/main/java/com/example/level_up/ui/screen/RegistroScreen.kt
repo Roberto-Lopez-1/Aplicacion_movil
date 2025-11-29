@@ -41,6 +41,11 @@ fun RegistroScreen(navController: NavHostController) {
     var confirmPassword by remember { mutableStateOf("") }
     var mensaje by remember { mutableStateOf("") }
 
+    var nombreError by remember { mutableStateOf(false) }
+    var emailError by remember { mutableStateOf(false) }
+    var passwordError by remember { mutableStateOf(false) }
+    var confirmPasswordError by remember { mutableStateOf(false) }
+
     val viewModel: LoginViewModel = viewModel()
 
     Box(
@@ -57,34 +62,46 @@ fun RegistroScreen(navController: NavHostController) {
 
             AppTextField(
                 value = nombre,
-                onValueChange = { nombre = it },
-                label = "Nombre"
+                onValueChange = {
+                    nombre = it
+                    nombreError = false },
+                label = "Nombre",
+                isError = nombreError
             )
 
             Spacer(Modifier.height(16.dp))
 
             AppTextField(
                 value = email,
-                onValueChange = { email = it },
-                label = "Email"
+                onValueChange = {
+                    email = it
+                    emailError = false },
+                label = "Email",
+                isError = emailError
             )
 
             Spacer(Modifier.height(16.dp))
 
             AppTextField(
                 value = password,
-                onValueChange = { password = it },
+                onValueChange = {
+                    password = it
+                    passwordError = false},
                 label = "Contraseña",
-                isPassword = true
+                isPassword = true,
+                isError = passwordError
             )
 
             Spacer(Modifier.height(16.dp))
 
             AppTextField(
                 value = confirmPassword,
-                onValueChange = { confirmPassword = it },
+                onValueChange = {
+                    confirmPassword = it
+                    confirmPasswordError = false},
                 label = "Confirmar Contraseña",
-                isPassword = true
+                isPassword = true,
+                isError = confirmPasswordError
             )
 
             if (mensaje.isNotEmpty()) {
@@ -103,7 +120,18 @@ fun RegistroScreen(navController: NavHostController) {
                 text = "REGISTRARSE",
                 color = Color(0xFF7289DA),
                 onClick = {
-                    if (validarFormulario(nombre, email, password, confirmPassword)) {
+
+                    nombreError = nombre.isBlank()
+                    emailError = email.isBlank()
+                    passwordError = password.isBlank() || password.length < 4
+                    confirmPasswordError = confirmPassword.isBlank() || confirmPassword != password
+
+                    if (nombreError||emailError||passwordError||confirmPasswordError) {
+                        mensaje = "❌ Por favor completa todos los campos correctamente"
+                        return@AppButton
+                    }
+
+
                         CoroutineScope(Dispatchers.IO).launch {
                             try {
                                 val nuevoUsuario = Usuario(
@@ -130,9 +158,6 @@ fun RegistroScreen(navController: NavHostController) {
                                 }
                             }
                         }
-                    } else {
-                        mensaje = "❌ Por favor completa todos los campos correctamente"
-                    }
                 }
             )
 
@@ -141,18 +166,4 @@ fun RegistroScreen(navController: NavHostController) {
             }
         }
     }
-}
-
-private fun validarFormulario(
-    nombre: String,
-    email: String,
-    password: String,
-    confirmPassword: String
-): Boolean {
-    return nombre.isNotBlank() &&
-            email.isNotBlank() &&
-            password.isNotBlank() &&
-            confirmPassword.isNotBlank() &&
-            password == confirmPassword &&
-            password.length >= 4
 }

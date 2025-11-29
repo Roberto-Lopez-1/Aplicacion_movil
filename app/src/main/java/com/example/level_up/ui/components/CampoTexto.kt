@@ -18,7 +18,8 @@ fun AppTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    isPassword: Boolean = false
+    isPassword: Boolean = false,
+    isError: Boolean = false
 ) {
     OutlinedTextField(
         value = value,
@@ -29,9 +30,9 @@ fun AppTextField(
         colors = TextFieldDefaults.colors(
             focusedTextColor = Color.White,
             unfocusedTextColor = Color.White,
-            focusedIndicatorColor = Color(0xFF00FF00),
-            unfocusedIndicatorColor = Color.Gray,
-            cursorColor = Color(0xFF00FF00),
+            focusedIndicatorColor = if (isError) Color.Red else Color(0xFF00FF00),
+            unfocusedIndicatorColor = if (isError) Color.Red else Color.Gray,
+            cursorColor = if (isError) Color.Red else Color(0xFF00FF00),
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,
             disabledContainerColor = Color.Transparent

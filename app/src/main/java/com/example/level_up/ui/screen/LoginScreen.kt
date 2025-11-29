@@ -40,6 +40,9 @@ fun LoginScreen(navController: NavController){
     var mensaje by remember { mutableStateOf("") }
     val context = LocalContext.current
 
+    var emailError by remember { mutableStateOf(false) }
+    var passwordError by remember { mutableStateOf(false) }
+
     val viewModel: LoginViewModel = viewModel()
 
     Box(
@@ -56,17 +59,25 @@ fun LoginScreen(navController: NavController){
 
             AppTextField(
                 value = email,
-                onValueChange = { email = it },
-                label = "Email"
+                onValueChange = {
+                    email = it
+                    emailError =  false
+                                },
+                label = "Email",
+                isError = emailError
             )
 
             Spacer(Modifier.height(16.dp))
 
             AppTextField(
                 value = password,
-                onValueChange = { password = it },
+                onValueChange = {
+                    password = it
+                    passwordError = false
+                                },
                 label = "Contraseña",
-                isPassword = true
+                isPassword = true,
+                isError = passwordError
             )
 
             if (mensaje.isNotEmpty()) {
@@ -83,6 +94,14 @@ fun LoginScreen(navController: NavController){
                 text = "INICIAR SESIÓN",
                 color = Color(0xFF7289DA),
                 onClick = {
+                    emailError = email.isBlank()
+                    passwordError = password.isBlank()
+
+                    if(emailError || passwordError) {
+                        mensaje = "Completa los campos"
+                        return@AppButton
+                    }
+
                     CoroutineScope(Dispatchers.IO).launch {
                         val usuario = viewModel.login(email, password)
                         withContext(Dispatchers.Main) {
@@ -95,6 +114,9 @@ fun LoginScreen(navController: NavController){
                                 }
                             } else {
                                 mensaje = "Email o contraseña incorrectos"
+
+                                emailError = true
+                                passwordError = true
                             }
                         }
                     }

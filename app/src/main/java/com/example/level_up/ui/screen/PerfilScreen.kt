@@ -23,6 +23,7 @@ import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -109,6 +110,9 @@ fun PerfilScreen(navController: NavController, usuarioViewModel: UsuarioViewMode
                     }
                 },
                 actions = {
+                    IconButton(onClick = { navController.navigate("Noticias") }) {
+                        Icon(Icons.Default.Info, contentDescription = "Noticias", tint = Color(0xFF7289DA))
+                    }
                     IconButton(onClick = {
                         SessionManager.logout(context)
                         navController.navigate("login") {

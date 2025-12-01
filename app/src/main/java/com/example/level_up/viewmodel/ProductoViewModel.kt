@@ -22,4 +22,22 @@ class ProductoViewModel(application: Application) : AndroidViewModel(application
             _productos.value = lista
         }
     }
+
+    fun eliminarProducto(producto: Producto) {
+        viewModelScope.launch {
+            productoDao.eliminar(producto)
+            cargarProductos() // Recargar la lista
+        }
+    }
+
+    fun actualizarProducto(id: Int, nombre: String, precio: Double) {
+        viewModelScope.launch {
+            val producto = productoDao.obtenerPorId(id)
+            if (producto != null) {
+                val productoActualizado = producto.copy(nombre = nombre, precio = precio)
+                productoDao.actualizar(productoActualizado)
+                cargarProductos() // Recargar la lista
+            }
+        }
+    }
 }

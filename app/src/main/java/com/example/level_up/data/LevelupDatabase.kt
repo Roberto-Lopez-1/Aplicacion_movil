@@ -52,7 +52,8 @@ abstract class LevelupDatabase : RoomDatabase() {
 
             val usuarios = listOf(
                 Usuario(nombre = "Daniel", email = "daniel@duocuc.cl", password = "password"),
-                Usuario(nombre = "Andres", email = "andres@duocuc.cl", password = "password")
+                Usuario(nombre = "Andres", email = "andres@duocuc.cl", password = "password"),
+                Usuario(nombre = "Admin", email = "admin", password = "admin")
             )
 
             usuarios.forEach { usuarioDao.insertar(it) }

@@ -9,6 +9,7 @@ import com.example.level_up.ui.screen.CarritoScreen
 import com.example.level_up.ui.screen.HomeScreen
 import com.example.level_up.ui.screen.LoadingScreen
 import com.example.level_up.ui.screen.LoginScreen
+import com.example.level_up.ui.screen.NewsScreen
 import com.example.level_up.ui.screen.PerfilScreen
 import com.example.level_up.ui.screen.RegistroScreen
 import com.example.level_up.viewmodel.CarritoViewModel
@@ -26,5 +27,6 @@ fun AppNavigation() {
         composable("home") { HomeScreen(navController = navController, carritoViewModel = carritoViewModel) }
         composable("carrito") { CarritoScreen(navController = navController, carritoViewModel = carritoViewModel) }
         composable("perfil") { PerfilScreen(navController) }
+        composable("Noticias") { NewsScreen(navController = navController) }
     }
 }

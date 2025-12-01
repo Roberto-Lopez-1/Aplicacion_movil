@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -70,6 +71,11 @@ fun CarritoScreen(navController: NavController, carritoViewModel: CarritoViewMod
                             contentDescription = "Regresar",
                             tint = Color.White
                         )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { navController.navigate("Noticias") }) {
+                        Icon(Icons.Default.Info, contentDescription = "Noticias", tint = Color(0xFF7289DA))
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

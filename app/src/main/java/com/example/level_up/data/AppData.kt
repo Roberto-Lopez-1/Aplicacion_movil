@@ -8,14 +8,16 @@ import com.example.level_up.model.Producto
 import com.example.level_up.model.Usuario
 
 object AppData {
-    val usuario = mutableListOf<Usuario>()
+    val usuario = mutableListOf<Usuario>(
+        Usuario("admin", "admin", "admin")
+    )
 
     var usuarioActual: Usuario? = null
 
     // Mapa para almacenar la imagen de perfil de cada usuario (email -> resourceId)
     val profileImages = mutableStateMapOf<String, Int>()
 
-    val producto = listOf(
+    val producto = mutableStateListOf(
         Producto(1, "Xbox Series X", 499990.0, R.drawable.xbox),
         Producto(2, "Playstation 5", 790000.0, R.drawable.playstation),
         Producto(3, "PC Gamers", 999990.0, R.drawable.pcgamer)

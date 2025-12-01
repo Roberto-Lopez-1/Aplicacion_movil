@@ -30,7 +30,8 @@ fun AppNavigation() {
         composable("catalogo") {
             CatalogoScreen(
                 onProfile = { navController.navigate("perfil") },
-                onCartClick = { navController.navigate("carrito") }
+                onCartClick = { navController.navigate("carrito") },
+                onNewsClick = { navController.navigate("noticias") }
             )
         }
         composable("carrito") { 
@@ -51,6 +52,9 @@ fun AppNavigation() {
         }
         composable("pantalla_selector_imagen") {
             PantallaSelectorImagen(onBack = { navController.popBackStack() })
+        }
+        composable("noticias") {
+            NewsScreen(onBack = { navController.popBackStack() })
         }
     }
 }

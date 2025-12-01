@@ -27,4 +27,16 @@ class CatalogoViewModel : ViewModel() {
 
         _estadoCarrito.value = AppData.carrito.toList()
     }
+
+    fun eliminarProducto(producto: Producto) {
+        AppData.producto.remove(producto)
+    }
+
+    fun editarProducto(productoOriginal: Producto, nuevoNombre: String, nuevoPrecio: Double) {
+        val index = AppData.producto.indexOf(productoOriginal)
+        if (index != -1) {
+            val productoActualizado = productoOriginal.copy(nombre = nuevoNombre, precio = nuevoPrecio)
+            AppData.producto[index] = productoActualizado
+        }
+    }
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
@@ -19,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.level_up.data.AppData
 import com.example.level_up.ui.components.TarjetaProducto
 import com.example.level_up.viewmodel.CatalogoViewModel
 
@@ -27,16 +29,21 @@ import com.example.level_up.viewmodel.CatalogoViewModel
 fun CatalogoScreen(
     catalogoViewModel: CatalogoViewModel = viewModel(),
     onProfile: () -> Unit,
-    onCartClick: () -> Unit
+    onCartClick: () -> Unit,
+    onNewsClick: () -> Unit
 ) {
     val productos = catalogoViewModel.productos
     val carrito by catalogoViewModel.estadoCarrito.collectAsState()
+    val isAdmin = AppData.usuarioActual?.nombre == "admin"
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("CATÁLOGO", fontWeight = FontWeight.Bold, color = Color(0xFF0034FF)) },
                 actions = {
+                    IconButton(onClick = onNewsClick) {
+                        Icon(Icons.Default.Info, contentDescription = "Noticias", tint = Color(0xFF00FF00))
+                    }
                     IconButton(onClick = onCartClick) {
                         BadgedBox(badge = {
                             if (carrito.isNotEmpty()) {
@@ -69,7 +76,9 @@ fun CatalogoScreen(
             items(productos) { producto ->
                 TarjetaProducto(
                     producto = producto,
-                    onAgregarClick = { catalogoViewModel.agregarAlCarrito(it) }
+                    onAgregarClick = { catalogoViewModel.agregarAlCarrito(it) },
+                    onEliminarClick = if (isAdmin) { { catalogoViewModel.eliminarProducto(producto) } } else null,
+                    onEditarClick = if (isAdmin) { { nombre, precio -> catalogoViewModel.editarProducto(producto, nombre, precio) } } else null
                 )
             }
         }

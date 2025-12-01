@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,7 +43,8 @@ import com.example.level_up.ui.components.AppButton
 fun PerfilScreen(
     onBack: () -> Unit,
     onLogout: () -> Unit,
-    onGoToImageSelector: () -> Unit
+    onGoToImageSelector: () -> Unit,
+    onNewsClick: () -> Unit
 ) {
     val user = AppData.usuarioActual
     val profileImage = user?.email?.let { AppData.profileImages[it] }
@@ -60,6 +62,9 @@ fun PerfilScreen(
                     }
                 },
                 actions = {
+                    IconButton(onClick = onNewsClick) {
+                        Icon(Icons.Default.Info, contentDescription = "Noticias", tint = Color(0xFF00FF00))
+                    }
                     IconButton(onClick = onLogout) {
                         Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Cerrar Sesión", tint = Color.Gray)
                     }

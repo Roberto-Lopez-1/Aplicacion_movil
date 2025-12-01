@@ -1,20 +1,22 @@
 package com.example.level_up.ui.components
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.level_up.model.Producto
@@ -22,8 +24,53 @@ import com.example.level_up.model.Producto
 @Composable
 fun TarjetaProducto(
     producto: Producto,
-    onAgregarClick: (Producto) -> Unit
+    onAgregarClick: (Producto) -> Unit,
+    onEliminarClick: (() -> Unit)? = null,
+    onEditarClick: ((String, Double) -> Unit)? = null
 ) {
+    var showEditDialog by remember { mutableStateOf(false) }
+    var editedName by remember { mutableStateOf(producto.nombre) }
+    var editedPrice by remember { mutableStateOf(producto.precio.toString()) }
+
+    if (showEditDialog) {
+        AlertDialog(
+            onDismissRequest = { showEditDialog = false },
+            title = { Text("Editar Producto") },
+            text = {
+                Column {
+                    TextField(
+                        value = editedName,
+                        onValueChange = { editedName = it },
+                        label = { Text("Nombre") }
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TextField(
+                        value = editedPrice,
+                        onValueChange = { editedPrice = it },
+                        label = { Text("Precio") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
+                }
+            },
+            confirmButton = {
+                Button(onClick = {
+                    val price = editedPrice.toDoubleOrNull()
+                    if (price != null && onEditarClick != null) {
+                        onEditarClick(editedName, price)
+                        showEditDialog = false
+                    }
+                }) {
+                    Text("Guardar")
+                }
+            },
+            dismissButton = {
+                Button(onClick = { showEditDialog = false }) {
+                    Text("Cancelar")
+                }
+            }
+        )
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -68,10 +115,37 @@ fun TarjetaProducto(
                     )
                 }
 
-                AppButton(
-                    text = "AGREGAR",
-                    onClick = { onAgregarClick(producto) }
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    AppButton(
+                        text = "AGREGAR",
+                        onClick = { onAgregarClick(producto) }
+                    )
+                    
+                    Row {
+                        if (onEditarClick != null) {
+                            IconButton(onClick = { showEditDialog = true }) {
+                                Icon(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = "Editar",
+                                    tint = Color.Yellow
+                                )
+                            }
+                        }
+                        if (onEliminarClick != null) {
+                            IconButton(onClick = onEliminarClick) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete, 
+                                    contentDescription = "Eliminar",
+                                    tint = Color.Red
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
     }

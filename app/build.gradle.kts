@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-
+    id("com.google.devtools.ksp")
     kotlin("kapt")
 }
 
@@ -107,4 +107,12 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.7.0")
     androidTestImplementation("io.mockk:mockk-android:1.13.8")
+
+
+        // Retrofit
+        implementation("com.squareup.retrofit2:retrofit:2.9.0")
+        implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+
+
 }

@@ -4,7 +4,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "https://videogames-news2.p.rapidapi.com/"
+    private const val BASE_URL = "https://www.gamerpower.com/api/"
 
     val instance: NewsApi by lazy {
         val retrofit = Retrofit.Builder()

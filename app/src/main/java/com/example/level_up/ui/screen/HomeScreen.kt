@@ -1,5 +1,6 @@
 package com.example.level_up.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,16 +52,28 @@ fun HomeScreen(
     val productos by productoViewModel.productos.collectAsState()
     val carrito by carritoViewModel.estadoCarrito.collectAsState()
     val context = LocalContext.current
-    
+
+    // State to track if user is admin
     var isAdmin by remember { mutableStateOf(false) }
 
+    // Verify admin status when screen loads
     LaunchedEffect(Unit) {
         productoViewModel.cargarProductos()
         val userId = SessionManager.getCurrentUserId(context)
+        Log.d("HomeScreen", "Usuario ID actual: $userId")
+
         if (userId > 0) {
             val usuario = usuarioViewModel.obtenerUsuarioPorId(userId)
-            if (usuario != null && usuario.nombre == "Admin") {
-                isAdmin = true
+            Log.d("HomeScreen", "Usuario encontrado: ${usuario?.nombre}")
+
+            // CHECK: Is name 'admin' OR is it the first user (ID 1)?
+            if (usuario != null) {
+                if (usuario.nombre.equals("admin", ignoreCase = true) || userId == 1) {
+                    Log.d("HomeScreen", "El usuario ES ADMIN")
+                    isAdmin = true
+                } else {
+                    Log.d("HomeScreen", "El usuario NO ES ADMIN")
+                }
             }
         }
     }
@@ -104,10 +117,15 @@ fun HomeScreen(
                 TarjetaProducto(
                     producto = producto,
                     onAddToCart = { carritoViewModel.agregarAlCarrito(it) },
+                    // THESE are correctly passing null or the function based on isAdmin
                     onDelete = if (isAdmin) { { productoViewModel.eliminarProducto(producto) } } else null,
-                    onEdit = if (isAdmin) { { nombre, precio -> productoViewModel.actualizarProducto(producto.id, nombre, precio) } } else null
+                    onEdit = if (isAdmin) { { nombre, precio ->
+                        productoViewModel.actualizarProducto(producto.id, nombre, precio)
+                    } } else null
                 )
             }
         }
     }
 }
+
+

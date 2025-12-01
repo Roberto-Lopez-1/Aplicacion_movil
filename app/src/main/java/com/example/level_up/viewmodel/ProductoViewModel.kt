@@ -26,7 +26,8 @@ class ProductoViewModel(application: Application) : AndroidViewModel(application
     fun eliminarProducto(producto: Producto) {
         viewModelScope.launch {
             productoDao.eliminar(producto)
-            cargarProductos() // Recargar la lista
+            // Refresh the list immediately after deletion to update UI
+            cargarProductos()
         }
     }
 
@@ -34,9 +35,14 @@ class ProductoViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch {
             val producto = productoDao.obtenerPorId(id)
             if (producto != null) {
-                val productoActualizado = producto.copy(nombre = nombre, precio = precio)
+                // FIX: Ensure we convert the Double price to Int safely if your DB uses Int
+                val productoActualizado = producto.copy(
+                    nombre = nombre,
+                    precio = precio.toInt()
+                )
                 productoDao.actualizar(productoActualizado)
-                cargarProductos() // Recargar la lista
+                // Refresh the list immediately after update to update UI
+                cargarProductos()
             }
         }
     }

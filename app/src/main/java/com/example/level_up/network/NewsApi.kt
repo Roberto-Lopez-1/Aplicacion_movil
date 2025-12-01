@@ -4,6 +4,6 @@ import com.example.level_up.model.News
 import retrofit2.http.GET
 
 interface NewsApi {
-    @GET("news")
+    @GET("giveaways")
     suspend fun getNews(): List<News>
 }

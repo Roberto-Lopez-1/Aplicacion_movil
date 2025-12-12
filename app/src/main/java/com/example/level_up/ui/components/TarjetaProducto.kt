@@ -1,17 +1,20 @@
 package com.example.level_up.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.level_up.model.Producto
@@ -26,6 +29,11 @@ fun TarjetaProducto(
     // State for the Edit Dialog
     var showEditDialog by remember { mutableStateOf(false) }
 
+    // Get image resource
+    val context = LocalContext.current
+    val name = producto.imagen?.replace(".png", "") ?: "pokeball"
+    val resourceId = context.resources.getIdentifier(name, "drawable", context.packageName)
+
     Card(
         colors = CardDefaults.cardColors(containerColor = Color(0xFF23272A)),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -36,6 +44,21 @@ fun TarjetaProducto(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Product Image
+            Card(
+                modifier = Modifier.size(80.dp),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = resourceId),
+                    contentDescription = "Imagen de ${producto.nombre}",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+
+            Spacer(Modifier.width(16.dp))
+
             Column(modifier = Modifier.weight(1f)) {
                 Text(text = producto.nombre, color = Color.White, fontWeight = FontWeight.Bold)
                 Text(text = "$${producto.precio}", color = Color(0xFF99AAB5))
@@ -95,4 +118,3 @@ fun TarjetaProducto(
         )
     }
 }
-

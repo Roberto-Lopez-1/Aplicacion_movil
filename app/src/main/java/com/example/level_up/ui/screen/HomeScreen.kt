@@ -11,10 +11,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -66,13 +68,14 @@ fun HomeScreen(
             val usuario = usuarioViewModel.obtenerUsuarioPorId(userId)
             Log.d("HomeScreen", "Usuario encontrado: ${usuario?.nombre}")
 
-            // CHECK: Is name 'admin' OR is it the first user (ID 1)?
             if (usuario != null) {
-                if (usuario.nombre.equals("admin", ignoreCase = true) || userId == 1) {
+                // Check specifically for email "admin" as per requirement
+                if (usuario.email == "admin") {
                     Log.d("HomeScreen", "El usuario ES ADMIN")
                     isAdmin = true
                 } else {
                     Log.d("HomeScreen", "El usuario NO ES ADMIN")
+                    isAdmin = false
                 }
             }
         }
@@ -107,6 +110,17 @@ fun HomeScreen(
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF23272A))
             )
         },
+        floatingActionButton = {
+            if (isAdmin) {
+                FloatingActionButton(
+                    onClick = { productoViewModel.restaurarProductos() },
+                    containerColor = Color(0xFF7289DA),
+                    contentColor = Color.White
+                ) {
+                    Icon(Icons.Default.Refresh, contentDescription = "Restaurar Productos")
+                }
+            }
+        },
         containerColor = Color(0xFF2C2F33)
     ) { padding ->
         LazyColumn(
@@ -117,7 +131,6 @@ fun HomeScreen(
                 TarjetaProducto(
                     producto = producto,
                     onAddToCart = { carritoViewModel.agregarAlCarrito(it) },
-                    // THESE are correctly passing null or the function based on isAdmin
                     onDelete = if (isAdmin) { { productoViewModel.eliminarProducto(producto) } } else null,
                     onEdit = if (isAdmin) { { nombre, precio ->
                         productoViewModel.actualizarProducto(producto.id, nombre, precio)
@@ -127,5 +140,3 @@ fun HomeScreen(
         }
     }
 }
-
-

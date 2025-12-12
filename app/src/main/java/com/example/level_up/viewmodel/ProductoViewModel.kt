@@ -46,4 +46,24 @@ class ProductoViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
+
+    fun restaurarProductos() {
+        viewModelScope.launch {
+            val defaultProducts = listOf(
+                Producto(nombre = "Xbox Series X", precio = 599990, imagen = "xbox.png"),
+                Producto(nombre = "PlayStation 5", precio = 459000, imagen = "playstation.png"),
+                Producto(nombre = "PC Gamer", precio = 659990, imagen = "pcgamer.png")
+            )
+            
+            val currentProducts = productoDao.obtenerTodos()
+            
+            defaultProducts.forEach { default ->
+                // Check if product with same name exists to avoid duplicates
+                if (currentProducts.none { it.nombre == default.nombre }) {
+                    productoDao.insertar(default)
+                }
+            }
+            cargarProductos()
+        }
+    }
 }

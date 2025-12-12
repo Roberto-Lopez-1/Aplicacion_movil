@@ -8,14 +8,28 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
+import com.example.level_up.data.SessionManager
 import com.example.level_up.ui.components.Logo
 import kotlinx.coroutines.delay
 
 @Composable
-fun PantallaScreen(onNavigate: () -> Unit) {
+fun LoadingScreen(navController: NavController) {
+    val context = LocalContext.current
+
     LaunchedEffect(Unit) {
         delay(2000)
-        onNavigate()
+
+        if (SessionManager.isLoggedIn(context)) {
+            navController.navigate("home") {
+                popUpTo("loading") { inclusive = true }
+            }
+        } else {
+            navController.navigate("login") {
+                popUpTo("loading") { inclusive = true }
+            }
+        }
     }
 
     Box(

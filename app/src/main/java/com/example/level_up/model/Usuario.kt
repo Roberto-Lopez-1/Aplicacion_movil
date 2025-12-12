@@ -1,7 +1,14 @@
 package com.example.level_up.model
 
-class Usuario(
-    val email: String,
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "Usuario")
+data class Usuario(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
     val nombre: String,
-    val password: String
+    val email: String,
+    val password: String,
+    val imagen: String?=null
 )

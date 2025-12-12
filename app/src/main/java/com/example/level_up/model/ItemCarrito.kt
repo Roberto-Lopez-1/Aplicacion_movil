@@ -1,6 +1,6 @@
 package com.example.level_up.model
 
-data class Articulo(
+data class ItemCarrito (
     val producto: Producto,
     val cantidad: Int
 )
